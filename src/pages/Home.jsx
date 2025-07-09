@@ -49,38 +49,35 @@ const Home = () => {
   // 🟦 Case: Not logged in → show hero with sign-up
   if (!filteredPosts.length && !authStatus) {
     return (
-      <div className="min-h-screen w-full bg-white">
-        <div className="hero h-full w-full">
-          <div className="hero-content flex-col lg:flex-row-reverse max-w-6xl">
-            <div>
-              <h1 className="text-4xl md:text-5xl text-red-500 font-bold mb-6 leading-snug">
-                Step Up to the Crease—<br />
-                Log In for Exclusive Cricket Articles!
-              </h1>
-              <button
-                className="btn btn-primary"
-                onClick={() => document.getElementById("signup").showModal()}
-              >
-                Join Our Community
-              </button>
-              <dialog id="signup" className="modal">
-                <div className="modal-box">
-                  <Signup />
-                </div>
-                <form method="dialog" className="modal-backdrop">
-                  <button>close</button>
-                </form>
-              </dialog>
+      <div className="hero bg-base-300 min-h-screen">
+            <div className="hero-content flex-col lg:flex-row-reverse">
+              <div>
+                <h1 className="text-5xl font-bold">
+                Step Up to the Crease—Log In for Exclusive Cricket Articles!
+                </h1>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => document.getElementById("signup").showModal()}
+                >
+                  Join Our Community
+                </button>
+                <dialog id="signup" className="modal">
+                  <div className="modal-box">
+                    <Signup />
+                  </div>
+                  <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                  </form>
+                </dialog>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
     );
   }
 
   // ✅ Case: Show post grid
   return (
-    <div className="min-h-screen w-full px-4 py-6 bg-white">
+    <div className="min-h-screen w-full px-4 py-6 bg-base-300">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredPosts.map((post) => {
           if (post.status === "active" || post.status === "inactive") {
