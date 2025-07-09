@@ -15,7 +15,6 @@ const Verify = () => {
             try {
                 const userdata=await  authservice.getCurrentuser();
                 if (userdata) dispatch(updateemailVerification(userdata));
-
                 else navigate("/");
                 console.log(userdata)
             } catch (error) {
