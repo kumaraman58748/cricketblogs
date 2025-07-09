@@ -83,7 +83,11 @@ class Service{
         }
     }
     async getFilePreview(fileId) {
-        return await this.bucket.getFilePreview(conf.appwriteBucketId, fileId)
+       try {
+         return await this.bucket.getFilePreview(conf.appwriteBucketId, fileId)
+       } catch (error) {
+            throw error;
+       }
     }
     async uploadFile(file) {
         try {
