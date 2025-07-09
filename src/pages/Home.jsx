@@ -1,82 +1,100 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import Signup from "../components/Signup";
+import { useDispatch, useSelector } from "react-redux";
 import dbservice from "../appwrite/config";
+import { setPosts } from "../app/postSlice";
+import PostCard from "../components/PostCard";
 
-const PostCard = ({ $id, title, featuredimg, $createdat, author }) => {
-  const [previewUrl, setPreviewUrl] = useState("");
-
-  const getRelativedate = (date) => {
-    const now = new Date();
-    const diff = now - date;
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(months / 12);
-
-    if (years > 0) return years + (years === 1 ? " year ago" : " years ago");
-    if (months > 0) return months + (months === 1 ? " month ago" : " months ago");
-    if (days > 0) return days + (days === 1 ? " day ago" : " days ago");
-    if (hours > 0) return hours + (hours === 1 ? " hour ago" : " hours ago");
-    if (minutes > 0) return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
-    if (seconds > 0) return seconds + (seconds === 1 ? " second ago" : " seconds ago");
-    return "Just now";
-  };
+const Home = () => {
+  const { status: authStatus, userData } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { posts, searchTerm } = useSelector((state) => state.post);
 
   useEffect(() => {
-    const fetchPreview = async () => {
-      try {
-        const result = await dbservice.getFilePreview(featuredimg);
-        setPreviewUrl(result.href);
-      } catch (err) {
-        console.error("Error loading preview:", err);
-      }
+    let isMounted = true;
+
+    if (authStatus && posts.length === 0) {
+      dbservice
+        .getPosts()
+        .then((postfromdb) => {
+          if (isMounted && postfromdb) {
+            dispatch(setPosts(postfromdb.documents));
+          }
+        })
+        .catch((error) => {
+          if (isMounted) {
+            console.error("Error fetching posts: ", error);
+          }
+        });
+    }
+
+    return () => {
+      isMounted = false;
     };
-    if (featuredimg) fetchPreview();
-  }, [featuredimg]);
+  }, [authStatus, dispatch, posts]);
 
-  return (
-    <Link to={`post/${$id}`}>
-      <div className="card bg-[#2c2c2c] text-white hover:scale-105 transition-all duration-200 shadow-md hover:shadow-xl rounded-xl overflow-hidden">
-        <figure>
-          {previewUrl ? (
-            <img
-              src={previewUrl}
-              className="w-full h-48 object-cover"
-              alt={title}
-            />
-          ) : (
-            <div className="w-full h-48 bg-gray-700 animate-pulse" />
-          )}
-        </figure>
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-        <div className="card-body">
-          <div className="avatar flex items-center gap-2 mb-2">
-            <div className="w-7 h-7 rounded-full overflow-hidden">
-              <img
-                src="https://thispersondoesnotexist.com/"
-                alt="author"
-                className="w-full h-full object-cover"
-              />
+  // 🟥 Case: Logged in but no posts match search
+  if (!filteredPosts.length && authStatus) {
+    return (
+      <div className="h-screen w-full flex justify-center items-center bg-white">
+        <h1 className="text-2xl font-semibold text-gray-500">No posts found!</h1>
+      </div>
+    );
+  }
+
+  // 🟦 Case: Not logged in → show hero with sign-up
+  if (!filteredPosts.length && !authStatus) {
+    return (
+      <div className="min-h-screen w-full bg-white">
+        <div className="hero h-full w-full">
+          <div className="hero-content flex-col lg:flex-row-reverse max-w-6xl">
+            <div>
+              <h1 className="text-4xl md:text-5xl text-red-500 font-bold mb-6 leading-snug">
+                Step Up to the Crease—<br />
+                Log In for Exclusive Cricket Articles!
+              </h1>
+              <button
+                className="btn btn-primary"
+                onClick={() => document.getElementById("signup").showModal()}
+              >
+                Join Our Community
+              </button>
+              <dialog id="signup" className="modal">
+                <div className="modal-box">
+                  <Signup />
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                  <button>close</button>
+                </form>
+              </dialog>
             </div>
-            <p className="text-sm font-medium text-gray-200">{author}</p>
           </div>
-
-          <h2
-            className="card-title line-clamp-2 text-lg font-semibold text-white"
-            title={title}
-          >
-            {title}
-          </h2>
-
-          <time className="block text-xs text-gray-400 mt-1">
-            {getRelativedate(new Date($createdat))}
-          </time>
         </div>
       </div>
-    </Link>
+    );
+  }
+
+  // ✅ Case: Show post grid
+  return (
+    <div className="min-h-screen w-full px-4 py-6 bg-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredPosts.map((post) => {
+          if (post.status === "active" || post.status === "inactive") {
+            return (
+              <div key={post.$id} className="w-full">
+                <PostCard {...post} author={userData.name} />
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </div>
   );
 };
 
-export default PostCard;
+export default Home;
