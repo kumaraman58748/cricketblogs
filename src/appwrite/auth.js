@@ -71,7 +71,8 @@ class Authservice {
     }
     async sendVerificationEmail() {
         try {
-            await this.account.createVerification("http://localhost:5173/verify");
+            // await this.account.createVerification("http://localhost:5173/verify");
+            await this.account.createVerification("https://cricketblogs-o8bf.vercel.app/verify");
             console.log("Verification email sent!");
         } catch (error) {
             console.error("Appwrite service :: sendVerificationEmail", error);
