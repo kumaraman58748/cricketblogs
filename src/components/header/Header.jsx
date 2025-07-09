@@ -105,7 +105,7 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar bg-gradient-to-r from-green-200 via-green-300 to-green-500 text-gray-800 shadow-md p-4 flex justify-between items-center w-full">
+    <div className='bg-gradient-to-r from-green-200 via-green-300 to-green-500 text-gray-800 shadow-md p-4 flex justify-between items-center w-full'>
       {/* Brand Name */}
       <div className="flex items-center">
         <Link to="/">

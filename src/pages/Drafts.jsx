@@ -13,8 +13,10 @@ const Drafts=()=>{
             {filteredPosts.map((post) => {
               if (post.status === "inactive") {
                 return (
+                  <div className="h-screen max-w-screen-lg">
                   <div key={post.$id}>
                     <PostCard {...post} author={userData.name} />
+                  </div>
                   </div>
                 );
               }

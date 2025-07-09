@@ -23,35 +23,35 @@ const PostCard=({$id,title,featuredimg,$createdat,author})=>{
     }
     return (
         <Link to ={`post/${$id}`}>
-            <div className="card card-compact bg-base-100 w-60 max-h-80 shadow hover:shadow-lg active:scale-95">
-        <figure>
-        <img
-            src={dbservice.getFilePreview(featuredimg)}
-            className="aspect-auto object-cover"
-            alt={title}
-          />
-        </figure>
-        <div className="card-body">
-          <div className="avatar space-x-2">
-            <div className="w-6 rounded">
-              <img
-                src="https://thispersondoesnotexist.com/"
-                width="20px"
-                height="20px"
+            <div className="card hover:scale-105 bg-white card-compact bg-base-100 w-70 max-h-90 shadow hover:shadow-lg active:scale-195">
+            <figure>
+            <img
+                src={dbservice.getFilePreview(featuredimg)}
+                className="aspect-auto w-full object-cover"
+                alt={title}
               />
+            </figure>
+            <div className="card-body">
+              <div className="avatar space-x-2">
+                <div className="w-6 rounded">
+                  <img  
+                    src="https://thispersondoesnotexist.com/"
+                    width="30px"
+                    height="30px"
+                  />
+                </div>
+                <p className="text-lg text-black text-4xl font-bold font-captilize font-medium">{author}</p>
+              </div>
+              <h2
+                className="card-title line-clamp-2 text-truncate text-pretty"
+                title={title}
+              >
+                {title}
+              </h2>
+              <time className="block text-xs text-gray-500">
+                {getRelativedate(new Date($createdat))}{"  "}
+              </time>
             </div>
-            <p className="text-lg font-medium">{author}</p>
-          </div>
-          <h2
-            className="card-title line-clamp-2 text-truncate text-pretty"
-            title={title}
-          >
-            {title}
-          </h2>
-          <time className="block text-xs text-gray-500">
-            {getRelativedate(new Date($createdat))}{"  "}
-          </time>
-        </div>
         </div>
         </Link>
     )

@@ -25,7 +25,7 @@ function App() {
     }
   }, [dispatch, authStatus]);
   return  !loading? (
-    <div className=" min-h-0 flex flex-col max-w-10xl  ">
+    <div className=" h-screen w-full min-h-0 flex flex-col max-w-10xl  ">
       <div className="flex-grow ">
         <Header />
         <main className="bg-base-200 p-4">

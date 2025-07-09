@@ -66,12 +66,18 @@ const Signup=()=>{
         }
     }
     return (
-            <>
+      <>
+          <div className="w-full bg-yellow-50 p-7 rounded">
               <h2 className="text-center text-2xl font-bold leading-tight">
                 Sign up to create account
               </h2>
-              <p className="text-center mt-2">
-              </p>
+              <button className="absolute top-0 right-0 p-2" onClick={() => document.getElementById("signup").close()}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+              <button className="absolute top-0 right-0 p-2" onClick={() => document.getElementById("signup").close()}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
               {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
               <form onSubmit={handleSubmit(create)} className="mt-4">
                 <div className="space-y-5">
@@ -110,7 +116,8 @@ const Signup=()=>{
                   </Button>
                 </div>
               </form>
-            </>
+            </div>
+          </>
 
         )
 }

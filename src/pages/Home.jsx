@@ -6,7 +6,7 @@ import { setPosts } from "../app/postSlice";
 import PostCard from "../components/PostCard"
 const Home=()=>{
     const { status: authStatus, userData } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); 
     const {posts,searchTerm}=useSelector((state)=>state.post)
     useEffect(()=>{
       let ismounted=true
@@ -42,14 +42,14 @@ const Home=()=>{
     if (!filteredPosts.length &&  !authStatus) {
       return (
         
-          <div className="hero bg-base-300 min-h-screen">
+          <div className="hero bg-white h-screen w-full">
             <div className="hero-content flex-col lg:flex-row-reverse">
               <div>
-                <h1 className="text-5xl font-bold">
+                <h1 className="text-5xl text-pretty capitalize  text-red-500 font-bold">
                 Step Up to the Crease—Log In for Exclusive Cricket Articles!
                 </h1>
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary "
                   onClick={() => document.getElementById("signup").showModal()}
                 >
                   Join Our Community
@@ -69,13 +69,13 @@ const Home=()=>{
       );
     }
     return(
-      <div className="w-full">
+      <div className="h-screen  w-full ">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-8">
         {filteredPosts.map((post) => {
-          if (post.status === "active") {
+          if (post.status === "active" || post.status === "inactive") {
             return (
               <div key={post.$id}>
-                <PostCard {...post} author={userData.name} />
+                <PostCard {...post} author={userData.name}  />
               </div>
             );
           }

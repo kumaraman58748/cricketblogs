@@ -18,11 +18,7 @@ class Authservice {
                 await this.account.createEmailPasswordSession(email, password);
                 console.log("User logged in successfully!");
     
-                // ✅ Now send email verification (user must be logged in)
-                await this.account.createVerification("http://localhost:5173/verify");
-                console.log("Verification email sent!");
-    
-                return userAccount; // Return created user
+                return userAccount; 
             } else {
                 return null;
             }
@@ -47,10 +43,10 @@ class Authservice {
             const user = await this.getCurrentuser();
     
             // ✅ Prevent login if email is not verified
-            if (!user.emailVerification) {
-                await this.logout();
-                throw new Error("Please verify your email before logging in.");
-            }
+            // if (!user.emailVerification) {
+            //     await this.logout();
+            //     throw new Error("Please verify your email before logging in.");
+            // }
     
             return user;
         } catch (error) {
